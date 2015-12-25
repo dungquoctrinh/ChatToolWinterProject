@@ -1,7 +1,5 @@
-// This file contains material supporting section 3.7 of the textbook:
-// "Object Oriented Software Engineering" and is issued under the open-source
-// license found at www.lloseng.com 
-
+import chat.ChatLog;
+import chat.Message;
 import java.io.*;
 import server.*;
 
@@ -19,6 +17,7 @@ public class EchoServer extends AbstractServer
      * The default port to listen on.
      */
     final public static int DEFAULT_PORT = 5555;
+    private ChatLog log;
 
     //Constructors ****************************************************
 
@@ -30,6 +29,7 @@ public class EchoServer extends AbstractServer
     public EchoServer(int port) 
     {
         super(port);
+        this.log = new ChatLog();
     }
 
 
@@ -43,7 +43,11 @@ public class EchoServer extends AbstractServer
      */
     public void handleMessageFromClient(Object msg, ConnectionToClient client)
     {
-        System.out.println("Message received: " + msg + " from " + client);
+        String logMessage = "Message received: " + msg + " from " + client;
+        
+        //In here assume the message is always string
+        this.log.addMessage(new Message((String) msg), logMessage);
+        System.out.println(logMessage);
         this.sendToAllClients(msg);
     }
 
